@@ -1,3 +1,4 @@
+import os
 import requests
 import json
 import time
@@ -7,6 +8,15 @@ import threading
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 from requests.exceptions import RequestException
+
+# 从环境变量读取多个机器码（用英文逗号分隔），未配置时回退到默认单备用值
+env_machines = os.getenv("APIPOST_MACHINES")
+if env_machines:
+    A = [m.strip() for m in env_machines.split(",") if m.strip()]
+else:
+    A = [
+        "bd2d54b7c2002"  # 默认单个备用值
+    ]
 
 thread_num = 5  # 线程数
 
@@ -95,11 +105,14 @@ def getSaltAndSign(pid):
 
 
 def get_content(pid):
+    # 每次请求随机选择一个
+    current_machine = random.choice(A)
+    
     _headers = {
         "accept": "application/json, text/plain, */*",
         "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
         "apipost-language": "zh-cn",
-        "apipost-machine": "bd2d54b7c2002",
+        "apipost-machine": current_machine,  # 动态应用随机选中的值
         "apipost-platform": "Win",
         "apipost-terminal": "web",
         "apipost-version": "8.2.7",
