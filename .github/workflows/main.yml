@@ -28,6 +28,9 @@ jobs:
         command: |
           python MIGU.py
           python sort_m3u.py
+      env:
+        # 从 secrets 中读取 APIPOST_MACHINES 并传递给 Python 脚本，未配置则使用默认的备用值
+        APIPOST_MACHINES: ${{ secrets.APIPOST_MACHINES }}
 
 
     - name: CommitAndPush
