@@ -9,7 +9,7 @@ jobs:
   main:
     name: update migu
     runs-on: ubuntu-latest
-    timeout-minutes: 15 # 总超时
+    timeout-minutes: 25 # 总超时
     permissions:
       contents: write  # 允许推送代码
     steps: 
@@ -21,7 +21,7 @@ jobs:
     - name: fetch and modify with Retry
       uses: nick-fields/retry@v4
       with:
-        timeout_minutes: 5    # 单次尝试如果超过 5 分钟就判定为超时
+        timeout_minutes: 10    # 单次尝试如果超过 10 分钟就判定为超时
         max_attempts: 2       # 超时后重试 1 次 
         retry_on: timeout     # 只有在超时的时候才触发重试
         retry_wait_seconds: 30   # 每次重试之间的等待间隔 
